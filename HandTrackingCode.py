@@ -22,11 +22,17 @@ while True:
     success, img = cap.read()
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(imgRGB)
-    print(results.multi_hand_landmarks) # test if the landmarks ae being read
+    #print(results.multi_hand_landmarks)        #test if the landmarks ae being read
 
     if results.multi_hand_landmarks:
         for handLms in results.multi_hand_landmarks:
-            mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)  #draws the points for the landmarks
+            for id, lm in enumerate(handLms.landmark):
+                #print(id,lm)
+                height, width, channel = img.shape
+                cx, cy = int(lm.x*width), int(lm.y*height)          #multiply the decimal values with the image pixel positions
+                print(id,cx,cy)
+
+            mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)           #draws the points for the landmarks
 
     cTime = time.time()
     fps = 1/(cTime - pTime)
